@@ -1,0 +1,34 @@
+name: Auto Create Branch After PR Merge
+
+on:
+    pull_request:
+        types: [closed]
+
+permissions:
+    contents: write
+
+jobs:
+    create-branch:
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Set Git identity
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Create branch from merge commit
+              run: |
+                  BRANCH_NAME="ch0/${{ github.event.pull_request.user.login }}"
+                  BASE_SHA="${{ github.event.pull_request.merge_commit_sha }}"
+
+                  echo "Creating branch: $BRANCH_NAME from $BASE_SHA"
+
+                  git branch $BRANCH_NAME $BASE_SHA
+                  git push origin $BRANCH_NAME
