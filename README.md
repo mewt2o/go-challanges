@@ -55,7 +55,6 @@ copies of this license document, and changing it is allowed as long
 as the name is changed.
 
 TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
 ```
 
 ---
