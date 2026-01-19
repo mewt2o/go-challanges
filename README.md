@@ -30,7 +30,7 @@ cd 0-stock-aggregator
 
 | # | Challenge | Category |  Topics  |
 |---|-----------|----------|----------------|
-| 0 | [Stock Aggregator](https://github.com/ngobam/go-challenges/tree/main/0-stock-aggregator) | Concurrency | Goroutines, Channels |
+| 0 | [Stock Aggregator](https://github.com/ngobam/go-challanges/tree/main/0-stock-aggregator) | Concurrency | Goroutines, Channels |
 
 *More challenges are coming soon*
 
