@@ -7,26 +7,38 @@ import (
 )
 
 func AggregateStockPrice(symbol string, sources []StockSource, timeout time.Duration) (StockPrice, error) {
-	// TODO: Implement this function
-	//
-	// Hints:
-	// 1. Create a channel to receive stock prices
-	// 2. Launch a goroutine for each source
-	// 3. Use select with time.After for timeout
-	// 4. Return the first result received
-	// 5. Consider using context for cancellation
-
-	panic("not implemented")
+	ch := make(chan StockPrice, len(sources))
+	for _, source := range sources {
+		go func(s StockSource) {
+			price := s.FetchPrice(symbol)
+			ch <- price
+		}(source)
+	}
+	select {
+	case price := <-ch:
+		return price, nil
+	case <-time.After(timeout):
+		return StockPrice{}, fmt.Errorf("timeout")
+	}
 }
 
 func AggregateStockPriceWithContext(ctx context.Context, symbol string, sources []StockSource) (StockPrice, error) {
-	// TODO: Implement this function
-	//
-	// Hints:
-	// 1. Similar to above but use ctx.Done() instead of time.After
-	// 2. This allows external cancellation control
-
-	panic("not implemented")
+	ch := make(chan StockPrice, len(sources))
+	for _, source := range sources {
+		go func(s StockSource) {
+			price := s.FetchPrice(symbol)
+			select {
+			case ch <- price:
+			case <-ctx.Done():
+			}
+		}(source)
+	}
+	select {
+	case price := <-ch:
+		return price, nil
+	case <-ctx.Done():
+		return StockPrice{}, ctx.Err()
+	}
 }
 
 func main() {
