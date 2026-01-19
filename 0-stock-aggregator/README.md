@@ -24,7 +24,6 @@ You need to fetch stock prices from multiple APIs concurrently. The function sho
 ```
 
 ## Running the Challenge
-
 ```bash
 # Run the program
 go run .
